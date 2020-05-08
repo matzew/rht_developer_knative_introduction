@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ws-dumper
+  namespace: dumper
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ws-dumper  
+  template:
+    metadata:
+      labels:
+        app: ws-dumper
+    spec:
+      containers:
+      - env:
+        - name: WEBSOCKET_SERVER
+          value: wss://api.usb.urbanobservatory.ac.uk/stream
+        - name: KAFKA_TOPIC
+          value: my-topic
+        - name: KAFKA_HOST
+          value: my-cluster-kafka-bootstrap.kafka
+        name: ws-kafka-bridge
+        image: docker.io/matzew/ws-kafka
+        imagePullPolicy: IfNotPresent
